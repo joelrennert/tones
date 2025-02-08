@@ -8,49 +8,49 @@ let activeOscillator = null
 let activeGainNode = null
 
 function playTone() {
-  if (audioContext.state === "suspended") {
-    audioContext.resume().then(() => triggerSound());
+  if (audioContext.state === 'suspended') {
+    audioContext.resume().then(() => triggerSound())
   } else {
-    triggerSound();
+    triggerSound()
   }
 }
 
 function triggerSound() {
   if (activeOscillator) {
-    const now = audioContext.currentTime;
-    activeGainNode.gain.cancelScheduledValues(now);
-    activeGainNode.gain.setValueAtTime(activeGainNode.gain.value, now);
-    activeGainNode.gain.linearRampToValueAtTime(0, now + 0.1);
-    activeOscillator.stop(now + 0.1);
+    const now = audioContext.currentTime
+    activeGainNode.gain.cancelScheduledValues(now)
+    activeGainNode.gain.setValueAtTime(activeGainNode.gain.value, now)
+    activeGainNode.gain.linearRampToValueAtTime(0, now + 0.1)
+    activeOscillator.stop(now + 0.1)
   }
 
-  const oscillator = audioContext.createOscillator();
-  const gainNode = audioContext.createGain();
+  const oscillator = audioContext.createOscillator()
+  const gainNode = audioContext.createGain()
 
-  const randomFrequency = scaleFrequencies[Math.floor(Math.random() * scaleFrequencies.length)];
+  const randomFrequency = scaleFrequencies[Math.floor(Math.random() * scaleFrequencies.length)]
 
-  oscillator.type = "sine";
-  oscillator.frequency.setValueAtTime(randomFrequency, audioContext.currentTime);
+  oscillator.type = 'sine'
+  oscillator.frequency.setValueAtTime(randomFrequency, audioContext.currentTime)
 
-  oscillator.connect(gainNode);
-  gainNode.connect(audioContext.destination);
+  oscillator.connect(gainNode)
+  gainNode.connect(audioContext.destination)
 
-  const now = audioContext.currentTime;
-  const attack = 0.05;
-  const decay = 0.1;
-  const sustain = 0.3;
-  const release = 0.6;
+  const now = audioContext.currentTime
+  const attack = 0.05
+  const decay = 0.1
+  const sustain = 0.3
+  const release = 0.6
 
-  gainNode.gain.setValueAtTime(0, now);
-  gainNode.gain.linearRampToValueAtTime(0.5, now + attack);
-  gainNode.gain.linearRampToValueAtTime(sustain, now + attack + decay);
-  gainNode.gain.linearRampToValueAtTime(0, now + attack + decay + release);
+  gainNode.gain.setValueAtTime(0, now)
+  gainNode.gain.linearRampToValueAtTime(0.5, now + attack)
+  gainNode.gain.linearRampToValueAtTime(sustain, now + attack + decay)
+  gainNode.gain.linearRampToValueAtTime(0, now + attack + decay + release)
 
-  oscillator.start(now);
-  oscillator.stop(now + attack + decay + release);
+  oscillator.start(now)
+  oscillator.stop(now + attack + decay + release)
 
-  activeOscillator = oscillator;
-  activeGainNode = gainNode;
+  activeOscillator = oscillator
+  activeGainNode = gainNode
 }
 </script>
 
@@ -63,6 +63,7 @@ function triggerSound() {
         class="square"
         @mouseover="playTone"
         @touchstart="playTone"
+        @click="playTone"
       />
     </div>
   </main>
